@@ -101,7 +101,8 @@ public class Bullet implements Runnable {
 
     @Override
     public void run() {
-        while (x > 0 && y > 0 && x <= 1500 && y <= 900) {
+        //子弹碰到边界后退出
+        while (x > 0 && y > 0 && x <= 1500 && y <= 900 && isLive) {
             try {
                 Thread.sleep(50);
             } catch (InterruptedException e) {

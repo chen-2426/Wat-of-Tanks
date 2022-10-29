@@ -9,6 +9,15 @@ public class Tank {
     private int y;
     private int direction;//坦克方向  0-向上，1-向右，2-向下，3-向左
     private int speed = 3;
+    private boolean isLive = true;
+
+    public boolean isLive() {
+        return isLive;
+    }
+
+    public void setLive(boolean live) {
+        isLive = live;
+    }
 
     public Tank(int x, int y) {
         this.x = x;
@@ -16,13 +25,6 @@ public class Tank {
         this.direction = 0;
     }
 
-    public int getSpeed() {
-        return speed;
-    }
-
-    public void setSpeed(int speed) {
-        this.speed = speed;
-    }
 
     public int getDirection() {
         return direction;
