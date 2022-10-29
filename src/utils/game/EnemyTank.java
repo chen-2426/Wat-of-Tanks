@@ -12,6 +12,8 @@ public class EnemyTank extends Tank implements Runnable{
     public EnemyTank(int x, int y) {
         super(x, y);
         this.setDirection(2);
+//        Thread thread = new Thread(this);
+//        thread.start();
     }
 
     public void shoot() {

@@ -92,7 +92,6 @@ public class Bullet implements Runnable {
 
     public void shootDown() {
         y += speed;
-
     }
 
     public void shootLeft() {
