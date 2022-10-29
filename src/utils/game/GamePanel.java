@@ -41,6 +41,14 @@ public class GamePanel extends JPanel implements KeyListener,Runnable {
         for (int i = 0; i < enemyTank_num; i++) {
             EnemyTank enemyTank = enemyTanks.get(i);
             drawTank(g,enemyTank.getX(),enemyTank.getY(),0,enemyTank.getDirection());
+            for (int j = 0; j < enemyTank.bullets.size(); j++) {
+                Bullet bullet = enemyTank.bullets.get(j);
+                if (bullet.isLive()){
+                    g.fill3DRect(bullet.getX(), bullet.getY(),3,3,false);
+                }else{
+                    enemyTank.bullets.remove(j);
+                }
+            }
         }
 
     }
@@ -139,11 +147,13 @@ public class GamePanel extends JPanel implements KeyListener,Runnable {
 
     @Override
     public void run() {
+        while(true){
         try {
-            Thread.sleep(10);
+            Thread.sleep(100);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
         this.repaint();
+        }
     }
 }
