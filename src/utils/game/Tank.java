@@ -8,7 +8,7 @@ public class Tank {
     private int x;
     private int y;
     private int direction;//坦克方向  0-向上，1-向右，2-向下，3-向左
-    private int speed = 10;
+    private int speed = 3;
 
     public Tank(int x, int y) {
         this.x = x;

@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Vector;
 
@@ -11,7 +12,7 @@ import java.util.Vector;
  * @author chenxi
  */
 //为了监听键盘事件，此处需要实现接口KeyListener
-public class GamePanel extends JPanel implements KeyListener {
+public class GamePanel extends JPanel implements KeyListener,Runnable {
     Player player =null;
     Vector<EnemyTank> enemyTanks = new Vector<>();
     int x;
@@ -29,7 +30,14 @@ public class GamePanel extends JPanel implements KeyListener {
         super.paint(g);
         //画出背景板
         g.fillRect(0,0,1960,1520);
+        //画出玩家
         drawTank(g,player.getX(),player.getY(),1,player.getDirection());
+        //画出玩家子弹
+        if(player.bullet!=null && player.bullet.isLive() ) {
+            System.out.println("shoot");
+            g.fill3DRect(player.bullet.getX(), player.bullet.getY(), 3, 3,false);
+        }
+        //画出敌方tank
         for (int i = 0; i < enemyTank_num; i++) {
             EnemyTank enemyTank = enemyTanks.get(i);
             drawTank(g,enemyTank.getX(),enemyTank.getY(),0,enemyTank.getDirection());
@@ -99,7 +107,6 @@ public class GamePanel extends JPanel implements KeyListener {
         }
 
     }
-
     @Override
     public void keyTyped(KeyEvent e) {
 
@@ -119,6 +126,8 @@ public class GamePanel extends JPanel implements KeyListener {
         } else if (e.getKeyChar() == KeyEvent.VK_A) {
             player.setDirection(3);
             player.moveleft();
+        } else if (e.getKeyChar() == KeyEvent.VK_J) {
+            player.shootBullet();
         }
         this.repaint();
     }
@@ -126,5 +135,15 @@ public class GamePanel extends JPanel implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
 
+    }
+
+    @Override
+    public void run() {
+        try {
+            Thread.sleep(10);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        this.repaint();
     }
 }
