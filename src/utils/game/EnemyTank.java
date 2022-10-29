@@ -40,18 +40,23 @@ public class EnemyTank extends Tank implements Runnable{
     @Override
     public void run() {
         while(true){
+            if(!this.isLive()){
+                break;
+            }
             int step =5;
             while(step>0){
                 randomMove(i);
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(800);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-                shoot();
+                if((int)(Math.random()*10)+1>8){
+                    shoot();
+                }
                 step--;
             }
-            i=(int)(Math.random()*100)+1;
+            i=(int)(Math.random()*4);
         }
     }
 }
