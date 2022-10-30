@@ -51,21 +51,21 @@ public class Tank {
         this.y = y;
     }
 
-    //TANK 移动；
+    //TANK 移动，限制在图框的范围内
     public void moveup() {
-        y -= speed;
+        if(y>=speed+10)y -= speed;
     }
 
     public void movedown() {
-        y += speed;
+        if(y<900-speed-140)y += speed;
     }
 
 
     public void moveleft() {
-        x -= speed;
+        if(x>=speed+10)x -= speed;
     }
 
     public void moveright() {
-        x += speed;
+        if(x<1500-speed-140)x += speed;
     }
 }

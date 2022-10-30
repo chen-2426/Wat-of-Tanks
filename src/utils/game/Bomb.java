@@ -11,6 +11,7 @@ public class Bomb {
         this.x = x;
         this.y = y;
     }
+    //控制动画生命周期
     public void lifeDown(){
         life -- ;
     }

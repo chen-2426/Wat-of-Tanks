@@ -34,19 +34,32 @@ public class GamePanel extends JPanel implements KeyListener, Runnable {
     public void paint(Graphics g) {
         super.paint(g);
         //画出背景板
-        g.fillRect(0, 0, 1960, 1520);
+        g.fillRect(0, 0, 1500, 900);
         //画出玩家
-        drawTank(g, player.getX(), player.getY(), 1, player.getDirection());
-        //画出玩家子弹
-        if (player.bullet != null && player.bullet.isLive()) {
-            g.fill3DRect(player.bullet.getX(), player.bullet.getY(), 3, 3, false);
+        if(player.isLive()){
+            drawTank(g, player.getX(), player.getY(), 1, player.getDirection());
         }
+        //画出玩家子弹
+        for (int j = 0; j < player.bullets.size(); j++) {
+            if (player.bullets.get((j)).isLive()) {
+                g.fill3DRect(player.bullets.get(j).getX(), player.bullets.get(j).getY(), 3, 3, false);
+            } else {
+                player.bullets.remove(j);
+            }
+        }
+        //销毁玩家
+        if (!player.isLive() && player.exist){
+            bombs.add(new Bomb(player.getX(), player.getY()));
+            player.exist = false;
+        }
+
         //画出敌方tank
         for (int i = 0; i < enemyTank_num; i++) {
             EnemyTank enemyTank = enemyTanks.get(i);
             if (enemyTank.isLive()) {
                 drawTank(g, enemyTank.getX(), enemyTank.getY(), 0, enemyTank.getDirection());
             }
+            //画出地方全部子弹
             for (int j = 0; j < enemyTank.bullets.size(); j++) {
                 Bullet bullet = enemyTank.bullets.get(j);
                 if (bullet.isLive()) {
@@ -55,23 +68,24 @@ public class GamePanel extends JPanel implements KeyListener, Runnable {
                     enemyTank.bullets.remove(j);
                 }
             }
-            if (!enemyTank.isLive()){
-                bombs.add(new Bomb(enemyTank.getX(),enemyTank.getY()));
+            if (!enemyTank.isLive()) {
+                bombs.add(new Bomb(enemyTank.getX(), enemyTank.getY()));
                 enemyTanks.remove(i);
                 enemyTank_num--;
 
             }
         }
+        //判断Boom效果
         for (int i = 0; i < bombs.size(); i++) {
             Bomb bomb = bombs.get(i);
-                g.setColor(Color.red);
-            if(bomb.life>=6) {
+            g.setColor(Color.red);
+            if (bomb.life >= 6) {
                 g.fillOval(bomb.x, bomb.y, 80, 80);
-            }else  if (bomb.life>=3){
-                g.fillOval(bomb.x+10, bomb.y+10, 60, 60);
-            }else if(bomb.life>=0){
-                g.fillOval(bomb.x+25, bomb.y+25, 30, 30);
-            }else {
+            } else if (bomb.life >= 3) {
+                g.fillOval(bomb.x + 10, bomb.y + 10, 60, 60);
+            } else if (bomb.life >= 0) {
+                g.fillOval(bomb.x + 25, bomb.y + 25, 30, 30);
+            } else {
                 bombs.remove(bomb);
                 break;
             }
@@ -79,7 +93,20 @@ public class GamePanel extends JPanel implements KeyListener, Runnable {
         }
 
     }
+    //判断子弹是否击中
+    public void hitJudgement(){
+        for (int i = 0; i < enemyTanks.size(); i++) {
+            EnemyTank enemyTank = enemyTanks.get(i);
+            for (int j = 0; j < player.bullets.size(); j++) {
+                hitTank(player.bullets.get(j), enemyTank);
+            }
+            for (int j = 0; j < enemyTank.bullets.size(); j++) {
+                hitTank(enemyTank.bullets.get(j), player);
+            }
 
+        }
+    }
+    //判断子弹击中对象
     public static void hitTank(Bullet bullet, Tank tank) {
         int direction = tank.getDirection();
         int xb = bullet.getX();
@@ -183,20 +210,22 @@ public class GamePanel extends JPanel implements KeyListener, Runnable {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if (e.getKeyChar() == KeyEvent.VK_S) { //KeyEvent.VK_S为S键对应的int值，java给每个按键赋予了对应的int数值；
-            player.setDirection(2);
-            player.movedown();
-        } else if (e.getKeyChar() == KeyEvent.VK_W) {
-            player.setDirection(0);
-            player.moveup();
-        } else if (e.getKeyChar() == KeyEvent.VK_D) {
-            player.setDirection(1);
-            player.moveright();
-        } else if (e.getKeyChar() == KeyEvent.VK_A) {
-            player.setDirection(3);
-            player.moveleft();
-        } else if (e.getKeyChar() == KeyEvent.VK_J) {
-            player.shootBullet();
+        if (player.isLive()) {
+            if (e.getKeyChar() == KeyEvent.VK_S) { //KeyEvent.VK_S为S键对应的int值，java给每个按键赋予了对应的int数值；
+                player.setDirection(2);
+                player.movedown();
+            } else if (e.getKeyChar() == KeyEvent.VK_W) {
+                player.setDirection(0);
+                player.moveup();
+            } else if (e.getKeyChar() == KeyEvent.VK_D) {
+                player.setDirection(1);
+                player.moveright();
+            } else if (e.getKeyChar() == KeyEvent.VK_A) {
+                player.setDirection(3);
+                player.moveleft();
+            } else if (e.getKeyChar() == KeyEvent.VK_J) {
+                player.shootBullet();
+            }
         }
         this.repaint();
     }
@@ -214,12 +243,7 @@ public class GamePanel extends JPanel implements KeyListener, Runnable {
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            if (player.bullet != null && player.bullet.isLive()) {
-                for (int i = 0; i < enemyTanks.size(); i++) {
-                    Tank enemyTank = enemyTanks.get(i);
-                    hitTank(player.bullet, enemyTank);
-                }
-            }
+            hitJudgement();
             this.repaint();
         }
     }

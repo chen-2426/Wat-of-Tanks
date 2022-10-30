@@ -22,7 +22,7 @@ public class EnemyTank extends Tank implements Runnable{
         thread.start();
         bullets.add(bullet);
     }
-
+    //敌方tank随机移动
     public void randomMove(int i) {
         if (i % 4 == 1) {
             this.setDirection(1);
