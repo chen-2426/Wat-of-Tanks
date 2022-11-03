@@ -10,10 +10,6 @@ public class EnemyTank extends Tank implements Runnable {
     Vector<Tank> otherTanks = new Vector<>();
     int i = 2;
 
-    public Vector<Tank> getOtherTanks() {
-        return otherTanks;
-    }
-
     public void setOtherTanks(Vector<Tank> otherTanks) {
         this.otherTanks = otherTanks;
     }
@@ -55,8 +51,8 @@ public class EnemyTank extends Tank implements Runnable {
     }
 
     private boolean collisionJudgement() {
-        for (int i = 0; i < otherTanks.size(); i++) {
-            if (otherTanks.get(i).isLive() && (!this.collisionVolume(otherTanks.get(i)))) {
+        for (Tank otherTank : otherTanks) {
+            if (otherTank.isLive() && (!this.collisionVolume(otherTank))) {
                 return false;
             }
         }
