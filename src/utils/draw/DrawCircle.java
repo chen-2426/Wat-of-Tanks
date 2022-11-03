@@ -40,18 +40,18 @@ class myPanel extends JPanel {
         //repaint函数被调用;
         super.paint(g);
 
-        g.setColor(Color.CYAN.brighter());
-        g.drawRect(520, 515, 40, 50);
-        g.fillRect(520, 515, 40, 50);
-        g.drawRect(500, 500, 20, 80);
-        g.fillRect(500, 500, 20, 80);
-        g.drawRect(560, 500, 20, 80);
-        g.fillRect(560, 500, 20, 80);
-        g.drawRect(538, 485, 4, 40);
-        g.fillRect(538, 485, 4, 40);
-        g.setColor(Color.cyan);
-        g.drawOval(525, 525, 30, 30);
-        g.fillOval(525, 525, 30, 30);
-
+//        g.setColor(Color.CYAN.brighter());
+//        g.drawRect(520, 515, 40, 50);
+//        g.fillRect(520, 515, 40, 50);
+//        g.drawRect(500, 500, 20, 80);
+//        g.fillRect(500, 500, 20, 80);
+//        g.drawRect(560, 500, 20, 80);
+//        g.fillRect(560, 500, 20, 80);
+//        g.drawRect(538, 485, 4, 40);
+//        g.fillRect(538, 485, 4, 40);
+//        g.setColor(Color.cyan);
+//        g.drawOval(525, 525, 30, 30);
+//        g.fillOval(525, 525, 30, 30);
+        g.drawString("aaaaa",500,500);
     }
 }

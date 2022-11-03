@@ -5,9 +5,23 @@ import java.util.Vector;
 /**
  * @author chenxi
  */
-public class EnemyTank extends Tank implements Runnable{
+public class EnemyTank extends Tank implements Runnable {
     Vector<Bullet> bullets = new Vector<>();
-    int i=2;
+    Vector<Tank> otherTanks = new Vector<>();
+    int i = 2;
+
+    public Vector<Tank> getOtherTanks() {
+        return otherTanks;
+    }
+
+    public void setOtherTanks(Vector<Tank> otherTanks) {
+        this.otherTanks = otherTanks;
+    }
+
+    public EnemyTank(int x, int y, int direction, Vector<Bullet> bullets) {
+        super(x, y, direction);
+        this.bullets = bullets;
+    }
 
     public EnemyTank(int x, int y) {
         super(x, y);
@@ -22,43 +36,53 @@ public class EnemyTank extends Tank implements Runnable{
         thread.start();
         bullets.add(bullet);
     }
+
     //敌方tank随机移动
     public void randomMove(int i) {
         if (i % 4 == 1) {
             this.setDirection(1);
-            moveright();
+            if (collisionJudgement()) moveright();
         } else if (i % 4 == 2) {
             this.setDirection(2);
-            movedown();
+            if (collisionJudgement()) movedown();
         } else if (i % 4 == 3) {
             this.setDirection(3);
-            moveleft();
+            if (collisionJudgement()) moveleft();
         } else {
             this.setDirection(0);
-            moveup();
+            if (collisionJudgement()) moveup();
         }
+    }
+
+    private boolean collisionJudgement() {
+        for (int i = 0; i < otherTanks.size(); i++) {
+            if (otherTanks.get(i).isLive() && (!this.collisionVolume(otherTanks.get(i)))) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
     public void run() {
-        while(true){
-            if(!this.isLive()){
+        while (true) {
+            if (!this.isLive()) {
                 break;
             }
-            int step =5;
-            while(step>0){
+            int step = 5;
+            while (step > 0) {
                 randomMove(i);
                 try {
                     Thread.sleep(800);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-                if((int)(Math.random()*10)+1>8){
+                if ((int) (Math.random() * 10) + 1 > 8) {
                     shoot();
                 }
                 step--;
             }
-            i=(int)(Math.random()*4);
+            i = (int) (Math.random() * 4);
         }
     }
 }

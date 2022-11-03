@@ -10,6 +10,11 @@ public class Player extends Tank {
     boolean exist = true;
     //弹夹
     Vector<Bullet> bullets = new Vector<>();
+
+    public Player(int x, int y, int direction) {
+        super(x, y, direction);
+    }
+
     //玩家操纵的坦克
     public Player(int x, int y) {
         super(x, y);

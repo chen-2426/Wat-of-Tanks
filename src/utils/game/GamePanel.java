@@ -19,6 +19,12 @@ public class GamePanel extends JPanel implements KeyListener, Runnable {
     int x;
     int y;
     int enemyTank_num = 3;
+    int score = 0;
+    String  str = "分数：\t";
+
+//    public GamePanel() {
+//
+//    }
 
     public GamePanel() {
         player = new Player(500, 500);
@@ -28,6 +34,17 @@ public class GamePanel extends JPanel implements KeyListener, Runnable {
             Thread thread = new Thread(enemyTank);
             thread.start();
         }
+        for (int i = 0; i < enemyTanks.size(); i++) {
+            EnemyTank enemyTank = enemyTanks.get(i);
+            Vector<Tank> tanks = new Vector<>();
+            tanks.add(player);
+            for (int j = 0; j < enemyTanks.size(); j++) {
+                if(enemyTanks.get(j)!=enemyTank){
+                    tanks.add(enemyTanks.get(j));
+                }
+            }
+            enemyTank.setOtherTanks(tanks);
+        }
     }
 
     @Override
@@ -35,6 +52,9 @@ public class GamePanel extends JPanel implements KeyListener, Runnable {
         super.paint(g);
         //画出背景板
         g.fillRect(0, 0, 1500, 900);
+        //画出分数
+        g.setColor(Color.white);
+        g.drawString(str+score,10,10);
         //画出玩家
         if(player.isLive()){
             drawTank(g, player.getX(), player.getY(), 1, player.getDirection());
@@ -71,6 +91,7 @@ public class GamePanel extends JPanel implements KeyListener, Runnable {
             if (!enemyTank.isLive()) {
                 bombs.add(new Bomb(enemyTank.getX(), enemyTank.getY()));
                 enemyTanks.remove(i);
+                score++;
                 enemyTank_num--;
 
             }
@@ -140,6 +161,7 @@ public class GamePanel extends JPanel implements KeyListener, Runnable {
         }
 
     }
+
 
     /**
      * @param g         画笔
@@ -213,21 +235,29 @@ public class GamePanel extends JPanel implements KeyListener, Runnable {
         if (player.isLive()) {
             if (e.getKeyChar() == KeyEvent.VK_S) { //KeyEvent.VK_S为S键对应的int值，java给每个按键赋予了对应的int数值；
                 player.setDirection(2);
-                player.movedown();
+                if(collisionJudgement())player.movedown();
             } else if (e.getKeyChar() == KeyEvent.VK_W) {
                 player.setDirection(0);
-                player.moveup();
+                if(collisionJudgement())player.moveup();
             } else if (e.getKeyChar() == KeyEvent.VK_D) {
                 player.setDirection(1);
-                player.moveright();
+                if(collisionJudgement())player.moveright();
             } else if (e.getKeyChar() == KeyEvent.VK_A) {
                 player.setDirection(3);
-                player.moveleft();
+                if(collisionJudgement())player.moveleft();
             } else if (e.getKeyChar() == KeyEvent.VK_J) {
                 player.shootBullet();
             }
         }
         this.repaint();
+    }
+    public boolean collisionJudgement(){
+        for (int i = 0; i < enemyTanks.size(); i++) {
+            if(!player.collisionVolume(enemyTanks.get(i))){
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override

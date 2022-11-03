@@ -8,7 +8,7 @@ public class Tank {
     private int x;
     private int y;
     private int direction;//坦克方向  0-向上，1-向右，2-向下，3-向左
-    private int speed = 3;
+    private int speed = 5;
     private boolean isLive = true;
 
     public boolean isLive() {
@@ -25,6 +25,11 @@ public class Tank {
         this.direction = 0;
     }
 
+    public Tank(int x, int y, int direction) {
+        this.x = x;
+        this.y = y;
+        this.direction = direction;
+    }
 
     public int getDirection() {
         return direction;
@@ -67,5 +72,44 @@ public class Tank {
 
     public void moveright() {
         if(x<1500-speed-140)x += speed;
+    }
+    public boolean collisionVolume(Tank tank2){
+
+        if(this.getDirection()==0){
+            int x = this.getX();
+            int y = this.getY()-15-speed;
+            if (updownJudgement(tank2, x, y)) return false;
+        } else if (this.getDirection()==1) {
+            int x = this.getX()+95+speed;
+            int y = this.getY();
+            if (leftrightJudgement(tank2, x, y)) return false;
+        } else if (this.getDirection()==2) {
+            int x = this.getX();
+            int y = this.getY()+95+speed;
+            if (updownJudgement(tank2, x, y)) return false;
+        } else if (this.getDirection()==3) {
+            int x = this.getX()-15-speed;
+            int y = this.getY();
+            if (leftrightJudgement(tank2, x, y)) return false;
+        }
+        return true;
+    }
+
+    private boolean leftrightJudgement(Tank tank2, int x, int y) {
+        if(x>tank2.getX() && x<tank2.getX()+95){
+            if((y >tank2.getY()&&y<tank2.getY()+80)||(y +80>tank2.getY()&&y+80<tank2.getY()+80)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean updownJudgement(Tank tank2, int x, int y) {
+        if(y>tank2.getY() && y<tank2.getY()+95){
+            if((x>tank2.getX()&&x<tank2.getX()+80)||(x+80>tank2.getX()&&x+80<tank2.getX()+80)){
+                return true;
+            }
+        }
+        return false;
     }
 }

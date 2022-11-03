@@ -2,6 +2,7 @@ package utils.game;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.FileWriter;
 
 /**
  * @author chenxi
