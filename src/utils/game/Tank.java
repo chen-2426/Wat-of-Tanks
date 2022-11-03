@@ -8,7 +8,7 @@ public class Tank {
     private int x;
     private int y;
     private int direction;//坦克方向  0-向上，1-向右，2-向下，3-向左
-    private int speed = 5;
+    private final int speed = 5;
     private boolean isLive = true;
 
     public boolean isLive() {
@@ -44,16 +44,8 @@ public class Tank {
         return x;
     }
 
-    public void setX(int x) {
-        this.x = x;
-    }
-
     public int getY() {
         return y;
-    }
-
-    public void setY(int y) {
-        this.y = y;
     }
 
     //TANK 移动，限制在图框的范围内
@@ -78,37 +70,33 @@ public class Tank {
         if(this.getDirection()==0){
             int x = this.getX();
             int y = this.getY()-15-speed;
-            if (updownJudgement(tank2, x, y)) return false;
+            return !updownJudgement(tank2, x, y);
         } else if (this.getDirection()==1) {
             int x = this.getX()+95+speed;
             int y = this.getY();
-            if (leftrightJudgement(tank2, x, y)) return false;
+            return !leftrightJudgement(tank2, x, y);
         } else if (this.getDirection()==2) {
             int x = this.getX();
             int y = this.getY()+95+speed;
-            if (updownJudgement(tank2, x, y)) return false;
+            return !updownJudgement(tank2, x, y);
         } else if (this.getDirection()==3) {
             int x = this.getX()-15-speed;
             int y = this.getY();
-            if (leftrightJudgement(tank2, x, y)) return false;
+            return !leftrightJudgement(tank2, x, y);
         }
         return true;
     }
 
     private boolean leftrightJudgement(Tank tank2, int x, int y) {
         if(x>tank2.getX() && x<tank2.getX()+95){
-            if((y >tank2.getY()&&y<tank2.getY()+80)||(y +80>tank2.getY()&&y+80<tank2.getY()+80)){
-                return true;
-            }
+            return (y > tank2.getY() && y < tank2.getY() + 80) || (y + 80 > tank2.getY() && y + 80 < tank2.getY() + 80);
         }
         return false;
     }
 
     private boolean updownJudgement(Tank tank2, int x, int y) {
         if(y>tank2.getY() && y<tank2.getY()+95){
-            if((x>tank2.getX()&&x<tank2.getX()+80)||(x+80>tank2.getX()&&x+80<tank2.getX()+80)){
-                return true;
-            }
+            return (x > tank2.getX() && x < tank2.getX() + 80) || (x + 80 > tank2.getX() && x + 80 < tank2.getX() + 80);
         }
         return false;
     }
