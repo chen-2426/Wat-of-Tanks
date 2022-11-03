@@ -4,8 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.sql.SQLOutput;
-import java.util.ArrayList;
 import java.util.Vector;
 
 /**
@@ -16,8 +14,6 @@ public class GamePanel extends JPanel implements KeyListener, Runnable {
     Player player = null;
     Vector<EnemyTank> enemyTanks = new Vector<>();
     Vector<Bomb> bombs = new Vector<>();
-    int x;
-    int y;
     int enemyTank_num = 3;
     int score = 0;
     String  str = "分数：\t";
@@ -38,9 +34,9 @@ public class GamePanel extends JPanel implements KeyListener, Runnable {
             EnemyTank enemyTank = enemyTanks.get(i);
             Vector<Tank> tanks = new Vector<>();
             tanks.add(player);
-            for (int j = 0; j < enemyTanks.size(); j++) {
-                if(enemyTanks.get(j)!=enemyTank){
-                    tanks.add(enemyTanks.get(j));
+            for (EnemyTank tank : enemyTanks) {
+                if (tank != enemyTank) {
+                    tanks.add(tank);
                 }
             }
             enemyTank.setOtherTanks(tanks);
@@ -116,8 +112,7 @@ public class GamePanel extends JPanel implements KeyListener, Runnable {
     }
     //判断子弹是否击中
     public void hitJudgement(){
-        for (int i = 0; i < enemyTanks.size(); i++) {
-            EnemyTank enemyTank = enemyTanks.get(i);
+        for (EnemyTank enemyTank : enemyTanks) {
             for (int j = 0; j < player.bullets.size(); j++) {
                 hitTank(player.bullets.get(j), enemyTank);
             }
@@ -135,31 +130,25 @@ public class GamePanel extends JPanel implements KeyListener, Runnable {
         int xt = tank.getX();
         int yt = tank.getY();
         if (direction == 0 || direction == 2) {
-            if ((xb < xt + 20 && xb > xt) || (xb < xt + 80 && xb > xt + 60)) {
-                if (yb > yt && yb < yt + 80) {
-                    bullet.setLive(false);
-                    tank.setLive(false);
-                }
-            } else if (xb > xt + 20 && xb < xt + 60) {
-                if (yb > yt + 15 && yb < yt + 65) {
-                    bullet.setLive(false);
-                    tank.setLive(false);
-                }
-            }
+            hitTankJudgement(bullet, tank, xb, yb, xt, yt);
         } else if (direction == 1 || direction == 3) {
-            if ((yb < yt + 20 && yb > yt) || (yb < yt + 80 && yb > yt + 60)) {
-                if (xb > xt && xb < xt + 80) {
-                    bullet.setLive(false);
-                    tank.setLive(false);
-                }
-            } else if (yb > yt + 20 && yb < yt + 60) {
-                if (xb > xt + 15 && xb < xt + 65) {
-                    bullet.setLive(false);
-                    tank.setLive(false);
-                }
-            }
+            hitTankJudgement(bullet, tank, yb, xb, yt, xt);
         }
 
+    }
+
+    private static void hitTankJudgement(Bullet bullet, Tank tank, int xb, int yb, int xt, int yt) {
+        if ((xb < xt + 20 && xb > xt) || (xb < xt + 80 && xb > xt + 60)) {
+            if (yb > yt && yb < yt + 80) {
+                bullet.setLive(false);
+                tank.setLive(false);
+            }
+        } else if (xb > xt + 20 && xb < xt + 60) {
+            if (yb > yt + 15 && yb < yt + 65) {
+                bullet.setLive(false);
+                tank.setLive(false);
+            }
+        }
     }
 
 
@@ -252,8 +241,8 @@ public class GamePanel extends JPanel implements KeyListener, Runnable {
         this.repaint();
     }
     public boolean collisionJudgement(){
-        for (int i = 0; i < enemyTanks.size(); i++) {
-            if(!player.collisionVolume(enemyTanks.get(i))){
+        for (EnemyTank enemyTank : enemyTanks) {
+            if (!player.collisionVolume(enemyTank)) {
                 return false;
             }
         }
