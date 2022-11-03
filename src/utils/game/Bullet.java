@@ -8,7 +8,7 @@ public class Bullet implements Runnable {
     private int y;
     private int direction;
     private int type;
-    private int speed = 10;
+    private final int speed = 10;
     private boolean isLive = true;
 
     public Bullet(int x, int y, int direction, int type) {
@@ -42,32 +42,8 @@ public class Bullet implements Runnable {
         return x;
     }
 
-    public void setX(int x) {
-        this.x = x;
-    }
-
     public int getY() {
         return y;
-    }
-
-    public int getType() {
-        return type;
-    }
-
-    public void setType(int type) {
-        this.type = type;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    public int getDirection() {
-        return direction;
-    }
-
-    public void setDirection(int direction) {
-        this.direction = direction;
     }
 
     public void shoot() {
