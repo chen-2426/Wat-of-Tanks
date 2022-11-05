@@ -15,12 +15,12 @@ public class GamePanel extends JPanel implements KeyListener, Runnable {
     Vector<EnemyTank> enemyTanks = new Vector<>();
     Vector<Bomb> bombs = new Vector<>();
     int enemyTank_num = 3;
-    int score = 0;
     String  str = "分数：\t";
 
-//    public GamePanel() {
-//
-//    }
+    public GamePanel(Player player, Vector<EnemyTank> enemyTanks) {
+        this.player = player;
+        this.enemyTanks = enemyTanks;
+    }
 
     public GamePanel() {
         player = new Player(500, 500);
@@ -50,7 +50,7 @@ public class GamePanel extends JPanel implements KeyListener, Runnable {
         g.fillRect(0, 0, 1500, 900);
         //画出分数
         g.setColor(Color.white);
-        g.drawString(str+score,10,10);
+        g.drawString(str+Recorder.getScore(),10,10);
         //画出玩家
         if(player.isLive()){
             drawTank(g, player.getX(), player.getY(), 1, player.getDirection());
@@ -87,7 +87,7 @@ public class GamePanel extends JPanel implements KeyListener, Runnable {
             if (!enemyTank.isLive()) {
                 bombs.add(new Bomb(enemyTank.getX(), enemyTank.getY()));
                 enemyTanks.remove(i);
-                score++;
+                Recorder.score+=1;
                 enemyTank_num--;
 
             }
